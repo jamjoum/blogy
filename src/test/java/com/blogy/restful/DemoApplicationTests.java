@@ -1,4 +1,4 @@
-package com.blogy.app;
+package com.blogy.restful;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

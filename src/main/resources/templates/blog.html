@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Full stack blog post's comments CRUD application</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="/comments.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container">
+    <center><h1>Blog Post's comments CRUD</h1></center>
+    <main id="app">
+      <router-view></router-view>
+    </main>
+  </div>
+
+  <template id="comment-list">
+    <div>
+      <div class="actions">
+        <a class="btn btn-default">
+          <router-link :to="{path: '/add-comment'}">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add comment
+          </router-link>
+        </a>
+      </div>
+      <ul class="timeline clearfix">
+        <div class="timeline-row" v-for="(comment,index) in filteredComments">
+        
+          <li v-show="index==0 || (index!=0 && new Date(filteredComments[index].creationDate).toISOString().slice(0,10)!=new Date(filteredComments[index-1].creationDate).toISOString().slice(0,10))" class="time-label">
+            <span class="bg-red" style="color:white;">{{ new Date(comment.creationDate).toISOString().slice(0,10) }}</span>
+          </li>
+          <li>
+            <i class="glyphicon glyphicon-envelope bg-blue" style="color:white;"></i>
+            <div class="timeline-item">
+              <div style="display: flex;"><span class="time"><i
+                    class="glyphicon glyphicon-time"></i> {{ new Date(comment.creationDate).toISOString().slice(11,16) }}</span>
+                <h4 class="timeline-header">{{ comment.author }}</h4>
+              </div>
+              
+              <div class="timeline-body">{{ comment.content }}</div>
+            
+              <div class="timeline-footer">
+                  <a class="btn btn-danger ">
+                      <router-link :to="{name: 'comment-delete', params: {comment_id: comment.id}}"> <i class="glyphicon glyphicon-trash" style="color:white;"></i></router-link>
+                    </a>
+                    <a class="btn btn-warning " >
+                        <router-link :to="{name: 'comment-edit', params: {comment_id: comment.id}}"> <i class="glyphicon glyphicon-pencil" style="color:white;"></i></router-link>
+                      </a><i>
+                    {{ comment.updateDate!=null ? 'last update date : '+new Date(comment.updateDate).toISOString().slice(0,10)+' at '+new Date(comment.updateDate).toISOString().slice(11,16):'' }}</i>
+               
+              </div>
+          </li>
+        
+        </div>
+        <div class="timeline-row" >
+        <li style="color:white;">
+          <i class="glyphicon glyphicon-time bg-gray" style="color:white;"></i>
+        </li>
+      </div>
+      </ul>
+      
+    </div>
+  </template>
+
+
+  <template id="add-comment">
+    <div>
+      <h2>Add new comment</h2>
+      <form @submit="createComment">
+        <div class="form-group">
+          <label for="add-author">Author</label>
+          <input class="form-control" id="add-author" v-model="comment.author" required />
+        </div>
+        <div class="form-group">
+          <label for="add-comment-content">Comment</label>
+          <textarea class="form-control" id="add-comment-content" rows="10" v-model="comment.content"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+
+  <template id="comment-edit">
+    <div>
+      <h2>Edit comment</h2>
+      <form @submit="updateComment">
+        <div class="form-group">
+          <label for="edit-author">Author</label>
+          <input class="form-control" id="edit-author" v-model="comment.author" required />
+        </div>
+        <div class="form-group">
+          <label for="edit-comment-content">Message</label>
+          <textarea class="form-control" id="edit-description-content" rows="3" v-model="comment.content"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+
+  <template id="comment-delete">
+    <div>
+      <h2>Delete <b>{{ comment.author }}</b> comment : </h2>
+      <p>{{ comment.content }}</p>
+      <form @submit="deleteComment">
+      
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a class="btn btn-default">
+          <router-link to="/">Cancel</router-link>
+        </a>
+      </form>
+    </div>
+  </template>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.6/vue-router.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+  <script src="/comments.js"></script>
+
+</body>
+
+</html>
