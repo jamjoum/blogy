@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.blogy.restful.dto.NewCommentDto;
 import com.blogy.restful.model.Comment;
@@ -25,9 +24,7 @@ public class CommentServiceImpl  implements CommentService{
         return commentRepository.findAll();
     }
     public List<Comment> findAllByPostID(Long id) {
-        return commentRepository.findAll().stream()
-        .filter(comment -> comment.getPostId().equals(id))
-        .collect(Collectors.toList());
+        return commentRepository.findByPostId(id);
     }
 
     public Optional<Comment> findById(Long id) {
@@ -38,6 +35,7 @@ public class CommentServiceImpl  implements CommentService{
         return commentRepository.save(comment);
     }
     
+    @Override
     public Long addComment(NewCommentDto newCommentDto) {
         Comment newComment=new Comment();
         newComment.setPostId(newCommentDto.getPostId());

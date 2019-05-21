@@ -29,14 +29,14 @@ var commentService = {
 
   update(id, comment, fn) {
     axios
-      .put('/post/' + id+'/comments', comment)
+      .put('/post/' + id +'/comments', comment)
       .then(response => fn(response))
       .catch(error => console.log(error))
   },
 
   deleteComment(id, fn) {
     axios
-      .delete('/post/' + id+'/comments')
+      .delete('/post/' + id +'/comments')
       .then(response => fn(response))
       .catch(error => console.log(error))
   }
@@ -88,7 +88,7 @@ var AddComment = Vue.extend({
   template: '#add-comment',
   data() {
     return {
-      comment: {name: '', description: '', price: 0}
+      comment: {name: '', description: ''}
     }
   },
   methods: {

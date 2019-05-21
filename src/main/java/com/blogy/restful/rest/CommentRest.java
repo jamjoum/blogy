@@ -10,6 +10,8 @@ import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
+import com.blogy.restful.dto.CommentDto;
+import com.blogy.restful.dto.NewCommentDto;
 import com.blogy.restful.model.Comment;
 import com.blogy.restful.service.CommentService;
 
@@ -25,14 +27,13 @@ public class CommentRest {
     }
 
     @PostMapping("/{id}/comment")
-    public ResponseEntity createNewComment(@PathVariable Long id,@Valid @RequestBody Comment comment) {
-        comment.setPostId(1L); // my post default id
-        comment.setCreationDate(new Date());
-        Comment newComment= commentService.save(comment);
+    public ResponseEntity<Long> createNewComment(@PathVariable Long id,@Valid @RequestBody NewCommentDto newCommentDto) {
+        newCommentDto.setPostId(1L); // my post default id
+        newCommentDto.setCreationDate(new Date());
+        Long idResult =  commentService.addComment(newCommentDto);
         
-        return (newComment != null) 
-            ? ResponseEntity.status(HttpStatus.CREATED).body(newComment)
-            : ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(idResult);
+            
     }
 
     @GetMapping("/{id}/comments")
@@ -41,18 +42,18 @@ public class CommentRest {
         List<Comment> result = commentService.findAllByPostID(id);
 
         return result.isEmpty()
-            ? ResponseEntity.noContent().build()
+            ? ResponseEntity.notFound().build()
             : ResponseEntity.ok(result);
        
     }
 
     @PutMapping("/{id}/comments")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long id, @Valid @RequestBody Comment comment) {
+    public ResponseEntity<Long> updateComment(@PathVariable Long id, @Valid @RequestBody CommentDto commentDto) {
         return commentService.findById(id)
       .map(oldComment -> {
         oldComment.setUpdateDate(new Date());
-        oldComment.setContent(comment.getContent());
-        return ResponseEntity.ok(commentService.save(oldComment));
+        oldComment.setContent(commentDto.getContent());
+        return ResponseEntity.ok(commentService.save(oldComment).getId());
       })
       .orElseGet(() -> {
         return ResponseEntity.badRequest().build();
