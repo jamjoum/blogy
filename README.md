@@ -4,7 +4,7 @@ Create a simple REST API to manage post's comments
 
 # Settings
 
-1. The database used is [`MySQL`](https://www.mysql.com); To create the database :
+1. Create a `MySQL` database :
 ```
 create database blogy
 ```
