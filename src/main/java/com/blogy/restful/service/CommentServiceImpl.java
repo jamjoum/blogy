@@ -1,6 +1,5 @@
 package com.blogy.restful.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,7 +14,6 @@ import com.blogy.restful.repository.CommentRepository;
 public class CommentServiceImpl  implements CommentService{
     private final CommentRepository commentRepository;
 
-    @Autowired
     public CommentServiceImpl(CommentRepository commentRepository){
         this.commentRepository=commentRepository;
     }
@@ -42,8 +40,7 @@ public class CommentServiceImpl  implements CommentService{
         newComment.setAuthor(newCommentDto.getAuthor());
         newComment.setContent(newCommentDto.getContent());
         newComment.setCreationDate(new Date());
-        Long newId = commentRepository.save(newComment).getId();
-        return newId;
+        return commentRepository.save(newComment).getId();
     }
     
     public void deleteById(Long id) {

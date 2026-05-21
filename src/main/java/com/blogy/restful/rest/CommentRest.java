@@ -1,6 +1,5 @@
 package com.blogy.restful.rest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,6 @@ import com.blogy.restful.service.CommentService;
 public class CommentRest {
     private final CommentService commentService;
 
-    @Autowired
     public CommentRest(CommentService commentService){
         this.commentService=commentService;
     }
@@ -55,14 +53,12 @@ public class CommentRest {
         oldComment.setContent(commentDto.getContent());
         return ResponseEntity.ok(commentService.save(oldComment).getId());
       })
-      .orElseGet(() -> {
-        return ResponseEntity.badRequest().build();
-      });
+      .orElseGet(() -> ResponseEntity.badRequest().build());
        
     }
 
     @DeleteMapping("/{id}/comments")
-    public ResponseEntity deleteComment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         if (!commentService.findById(id).isPresent()) {
             ResponseEntity.badRequest().build();
         }
