@@ -22,10 +22,8 @@ public class Comment {
 
     private String author;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     
-    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
     public String getAuthor() {

@@ -23,12 +23,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
-public class CommentRestIntegrationTest {
+class CommentRestIntegrationTest {
 
     private MockMvc mvc;
 
@@ -36,12 +35,12 @@ public class CommentRestIntegrationTest {
     private CommentService commentService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.mvc = MockMvcBuilders.standaloneSetup(new CommentRest(commentService)).build();
     }
 
     @Test
-    public void getCommentsList_shouldReturnComments() throws Exception {
+    void getCommentsList_shouldReturnComments() throws Exception {
         List<Comment> comments = new ArrayList<>();
         Comment comment = new Comment();
         comment.setId(1L);
@@ -61,7 +60,7 @@ public class CommentRestIntegrationTest {
     }
 
     @Test
-    public void createComment_shouldReturnCreated() throws Exception {
+    void createComment_shouldReturnCreated() throws Exception {
         NewCommentDto newComment = new NewCommentDto();
         newComment.setAuthor("rami");
         newComment.setContent("init content");
@@ -77,7 +76,7 @@ public class CommentRestIntegrationTest {
     }
 
     @Test
-    public void deleteComment_shouldReturnOk() throws Exception {
+    void deleteComment_shouldReturnOk() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/post/1/comments")).andExpect(status().isOk());
     }
 
